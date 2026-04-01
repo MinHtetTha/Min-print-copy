@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min Copy & Print</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #ff6600; /* Orange */
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --border-color: #eee;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+        }
+
+        header h1 { font-size: 2.2rem; }
+        header p { font-size: 1rem; opacity: 0.9; }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 25px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ပစ္စည်းနှင့် စျေးနှုန်းဇယား (Modified) */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #fff3e0;
+            color: #555;
+        }
+
+        .product-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        /* စျေးနှုန်းတွက်စနစ် */
+        .calculator-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        select, input[type="number"] {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .total-display {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        #total-price {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* ငွေပေးချေမှု */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .pay-item {
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        /* ဆက်သွယ်ရန် */
+        .social-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            text-decoration: none;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .messenger { background: #0084ff; }
+        .messenger:hover { background: #0066cc; }
+        .viber { background: #7360f2; }
+        .viber:hover { background: #5a4bcf; }
+        .phone { background: #28a745; }
+        .phone:hover { background: #1e7e34; }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            font-size: 0.9rem;
+            color: #777;
+            background: #eee;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            th, td { padding: 10px; font-size: 0.85rem; }
+            .product-img { width: 40px; height: 40px; }
+            header h1 { font-size: 1.8rem; }
+            section { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Min Copy & Print</h1>
+        <p>အရည်အသွေးမြင့် ပရင့်ဝန်ဆောင်မှုများ</p>
+    </header>
+
+    <div class="container">
+        
+        <section class="calculator-section">
+            <h2><i class="fas fa-calculator"></i> စျေးနှုန်းတွက်ချက်ရန်</h2>
+            <div class="calculator-form">
+                <div class="input-group">
+                    <label for="product-select">ဝန်ဆောင်မှု ရွေးချယ်ပါ</label>
+                    <select id="product-select">
+                        <option value="0" data-price="0">-- ရွေးချယ်ပါ --</option>
+                        <option value="1" data-price="100">A4 တစ်ဖက် (အမည်း)</option>
+                        <option value="2" data-price="150">A4 နှစ်ဖက် (အမည်း)</option>
+                        <option value="3" data-price="300">A4 ကာလာ (စာသား)</option>
+                        <option value="4" data-price="500">ဓာတ်ပုံထုတ်ခြင်း (4x6)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="quantity">အရေအတွက် (ရွက်/ပုံ)</label>
+                    <input type="number" id="quantity" min="1" value="1">
+                </div>
+            </div>
+            <div class="total-display">
+                <p>စုစုပေါင်း ကျသင့်ငွေ:</p>
+                <div id="total-price">0 ကျပ်</div>
+            </div>
+        </section>
+
+        <section class="price-section">
+            <h2><i class="fas fa-print"></i> ဝန်ဆောင်မှုနှင့် စျေးနှုန်းများ</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ပုံ</th>
+                        <th>ပစ္စည်းအမျိုးအမည်</th>
+                        <th>စျေးနှုန်း (ကျပ်)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="https://via.placeholder.com/50" alt="A4 Black" class="product-img"></td>
+                        <td>A4 တစ်ဖက် (အမည်း)</td>
+                        <td>၁၀၀</td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://via.placeholder.com/50" alt="A4 Black Double" class="product-img"></td>
+                        <td>A4 နှစ်ဖက် (အမည်း)</td>
+                        <td>၁၅၀</td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://via.placeholder.com/50" alt="A4 Color" class="product-img"></td>
+                        <td>A4 ကာလာ (စာသား)</td>
+                        <td>၃၀၀</td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://via.placeholder.com/50" alt="Photo Print" class="product-img"></td>
+                        <td>ဓာတ်ပုံထုတ်ခြင်း (4x6)</td>
+                        <td>၅၀၀</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="payment-section">
+            <h2><i class="fas fa-wallet"></i> ငွေပေးချေရန်</h2>
+            <div class="payment-grid">
+                <div class="pay-item">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d1/KBZ_Pay_Logo.png" alt="KPay" width="40">
+                    <div>
+                        <strong>KBZ Pay</strong><br>
+                        09XXXXXXXXX
+                    </div>
+                </div>
+                <div class="pay-item">
+                    <img src="https://wavemoney.com.mm/images/wave-money-logo.png" alt="Wave" width="40">
+                    <div>
+                        <strong>Wave Pay</strong><br>
+                        09XXXXXXXXX
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section">
+            <h2><i class="fas fa-address-book"></i> အော်ဒါတင်ရန် ဆက်သွယ်ပါ</h2>
+            <div class="social-links">
+                <a href="https://m.me/your-page-link" class="btn messenger" target="_blank"><i class="fab fa-facebook-messenger"></i> Messenger</a>
+                <a href="viber://chat?number=+959XXXXXXXXX" class="btn viber"><i class="fab fa-viber"></i> Viber</a>
+                <a href="tel:+959XXXXXXXXX" class="btn phone"><i class="fas fa-phone"></i> Call Now</a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Min Copy & Print. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const productSelect = document.getElementById('product-select');
+        const quantityInput = document.getElementById('quantity');
+        const totalPriceDisplay = document.getElementById('total-price');
+
+        function updatePrice() {
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const pricePerUnit = parseInt(selectedOption.getAttribute('data-price'));
+            const quantity = parseInt(quantityInput.value);
+
+            if (isNaN(quantity) || quantity < 1) {
+                totalPriceDisplay.textContent = '0 ကျပ်';
+                return;
+            }
+
+            const totalPrice = pricePerUnit * quantity;
+            totalPriceDisplay.textContent = totalPrice.toLocaleString('my') + ' ကျပ်';
+        }
+
+        productSelect.addEventListener('change', updatePrice);
+        quantityInput.addEventListener('input', updatePrice);
+    </script>
+
+</body>
+</html>
