@@ -3,216 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min Copy & Print</title>
+    <title>Min Copy & Print Order System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root {
-            --primary-color: #ff6600;
-            --bg-color: #f0f2f5;
-            --text-color: #333;
-        }
+        :root { --primary: #ff6600; --secondary: #2c3e50; --bg: #f8f9fa; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pyidaungsu', sans-serif; }
+        body { background: var(--bg); color: #333; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        header { background: var(--primary); color: white; text-align: center; padding: 30px 10px; border-radius: 0 0 25px 25px; }
 
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+        .container { max-width: 500px; margin: auto; padding: 15px; }
+        section { background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { font-size: 1.1rem; color: var(--primary); margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
 
-        header {
-            background: var(--primary-color);
-            color: white;
-            text-align: center;
-            padding: 2rem 1rem;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-        }
+        /* ပစ္စည်းပြကွက် */
+        .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .item-card { border: 1px solid #eee; padding: 10px; border-radius: 10px; text-align: center; }
+        .item-card i { font-size: 2rem; color: #555; margin-bottom: 5px; }
+        .item-card.color i { color: var(--primary); }
+        .price { font-weight: bold; display: block; color: var(--primary); }
 
-        .container { max-width: 600px; margin: 20px auto; padding: 0 15px; }
+        /* Order Form */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
+        .order-no { background: #e9ecef; font-weight: bold; color: var(--secondary); }
 
-        section {
-            background: white;
-            margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        h2 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* ပစ္စည်းပုံများနှင့် ဇယား */
-        .product-list { display: flex; flex-direction: column; gap: 10px; }
-        .product-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        .product-img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .product-info { flex-grow: 1; }
-        .price-tag { font-weight: bold; color: var(--primary-color); }
-
-        /* Calculator */
-        .input-group { margin-bottom: 10px; }
-        select, input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-        .total-box {
-            background: #fff3e0;
-            padding: 15px;
-            text-align: center;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary-color);
+        .btn-order { 
+            width: 100%; background: var(--primary); color: white; border: none; 
+            padding: 15px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
         }
 
         /* Payment QR */
-        .payment-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            text-align: center;
-        }
-        .qr-card {
-            border: 1px solid #eee;
-            padding: 10px;
-            border-radius: 10px;
-        }
-        .qr-img { width: 100%; max-width: 120px; border-radius: 5px; margin-top: 5px; }
+        .qr-area { display: flex; gap: 10px; justify-content: center; }
+        .qr-box { text-align: center; font-size: 0.8rem; }
+        .qr-box img { width: 100px; height: 100px; border: 1px solid #ddd; margin-top: 5px; }
 
-        /* Buttons */
-        .social-links { display: grid; gap: 10px; }
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px;
-            text-decoration: none;
-            color: white;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-        .telegram { background: #0088cc; }
-        .viber { background: #7360f2; }
-        .phone { background: #28a745; }
-
-        footer { text-align: center; padding: 20px; color: #888; font-size: 0.8rem; }
+        footer { text-align: center; padding: 20px; font-size: 0.8rem; color: #888; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Min Copy & Print</h1>
-        <p>မိတ္တူနှင့် ပရင့်ဝန်ဆောင်မှု</p>
-    </header>
+<header>
+    <h1>Min Copy & Print</h1>
+    <p>စိတ်တိုင်းကျ Print ထုတ်ပေးပါသည်</p>
+</header>
 
-    <div class="container">
-        
-        <section>
-            <h2><i class="fas fa-calculator"></i> စျေးနှုန်းတွက်ရန်</h2>
-            <div class="input-group">
-                <label>ဝန်ဆောင်မှုရွေးပါ</label>
-                <select id="product-select">
-                    <option value="0" data-price="0">-- ရွေးချယ်ပါ --</option>
-                    <option value="1" data-price="100">A4 တစ်ဖက် (အမည်း)</option>
-                    <option value="2" data-price="150">A4 နှစ်ဖက် (အမည်း)</option>
-                    <option value="3" data-price="300">A4 ကာလာ (စာသား)</option>
-                    <option value="4" data-price="500">ဓာတ်ပုံထုတ်ခြင်း (4x6)</option>
+<div class="container">
+    <section>
+        <h2><i class="fas fa-tags"></i> ဝန်ဆောင်မှုများ</h2>
+        <div class="item-grid">
+            <div class="item-card">
+                <i class="fas fa-file-alt"></i>
+                <span>A4 အမည်း</span>
+                <span class="price">၁၀၀ ကျပ်</span>
+            </div>
+            <div class="item-card color">
+                <i class="fas fa-file-image"></i>
+                <span>A4 ကာလာ</span>
+                <span class="price">၃၀၀ ကျပ်</span>
+            </div>
+            <div class="item-card">
+                <i class="fas fa-copy"></i>
+                <span>မိတ္တူ (A4)</span>
+                <span class="price">၁၀၀ ကျပ်</span>
+            </div>
+            <div class="item-card color">
+                <i class="fas fa-images"></i>
+                <span>ဓာတ်ပုံ (4x6)</span>
+                <span class="price">၅၀၀ ကျပ်</span>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2><i class="fas fa-shopping-cart"></i> Order တင်ရန်</h2>
+        <form id="orderForm">
+            <div class="form-group">
+                <label>Order နံပါတ် (Auto)</label>
+                <input type="text" id="orderNo" class="order-no" readonly>
+            </div>
+            <div class="form-group">
+                <label>အမျိုးအမည် ရွေးပါ</label>
+                <select id="itemType" required>
+                    <option value="A4 အမည်း">A4 အမည်း (၁၀၀ ကျပ်)</option>
+                    <option value="A4 ကာလာ">A4 ကာလာ (၃၀၀ ကျပ်)</option>
+                    <option value="မိတ္တူ">မိတ္တူ (၁၀၀ ကျပ်)</option>
+                    <option value="ဓာတ်ပုံ 4x6">ဓာတ်ပုံ 4x6 (၅၀၀ ကျပ်)</option>
                 </select>
             </div>
-            <div class="input-group">
+            <div class="form-group">
                 <label>အရေအတွက်</label>
-                <input type="number" id="quantity" value="1" min="1">
+                <input type="number" id="qty" value="1" min="1" required>
             </div>
-            <div class="total-box" id="total-price">0 ကျပ်</div>
-        </section>
-
-        <section>
-            <h2><i class="fas fa-list"></i> ဝန်ဆောင်မှုများနှင့် စျေးနှုန်းများ</h2>
-            <div class="product-list">
-                <div class="product-item">
-                    <img src="https://images.unsplash.com/photo-1589365278144-c9e705f843ba?q=80&w=200&auto=format&fit=crop" class="product-img" alt="A4 Print">
-                    <div class="product-info">
-                        <div>A4 တစ်ဖက် (အမည်း)</div>
-                        <div class="price-tag">၁၀၀ ကျပ်</div>
-                    </div>
-                </div>
-                <div class="product-item">
-                    <img src="https://images.unsplash.com/photo-1562654501-a0ccc0af3fb1?q=80&w=200&auto=format&fit=crop" class="product-img" alt="A4 Color">
-                    <div class="product-info">
-                        <div>A4 ကာလာ (စာသား)</div>
-                        <div class="price-tag">၃၀၀ ကျပ်</div>
-                    </div>
-                </div>
-                <div class="product-item">
-                    <img src="https://images.unsplash.com/photo-1534067783941-51c9c23ecefd?q=80&w=200&auto=format&fit=crop" class="product-img" alt="Photo Print">
-                    <div class="product-info">
-                        <div>ဓာတ်ပုံထုတ်ခြင်း (4x6)</div>
-                        <div class="price-tag">၅၀၀ ကျပ်</div>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label>မှာကြားလိုသည့် အသေးစိတ် (ဥပမာ-စာအုပ်ချုပ်ရန်)</label>
+                <textarea id="note" rows="3" placeholder="ဘာလုပ်ပေးရမလဲ ရေးပေးပါ..."></textarea>
             </div>
-        </section>
+            <button type="submit" class="btn-order">Telegram မှ အော်ဒါတင်မည်</button>
+        </form>
+    </section>
 
-        <section>
-            <h2><i class="fas fa-wallet"></i> ငွေပေးချေရန် (09964563388)</h2>
-            <div class="payment-grid">
-                <div class="qr-card">
-                    <strong>KPay</strong>
-                    <img src="kpay-qr.jpg" alt="KPay QR" class="qr-img">
-                </div>
-                <div class="qr-card">
-                    <strong>Wave</strong>
-                    <img src="wave-qr.jpg" alt="Wave QR" class="qr-img">
-                </div>
-            </div>
-        </section>
+    <section>
+        <h2><i class="fas fa-university"></i> ငွေပေးချေရန် (09964563388)</h2>
+        <div class="qr-area">
+            <div class="qr-box"><strong>KPay QR</strong><br><img src="kpay-qr.jpg"></div>
+            <div class="qr-box"><strong>Wave QR</strong><br><img src="wave-qr.jpg"></div>
+        </div>
+    </section>
+</div>
 
-        <section>
-            <h2><i class="fas fa-phone-alt"></i> အော်ဒါတင်ရန် ဆက်သွယ်ပါ</h2>
-            <div class="social-links">
-                <a href="https://t.me/+959964563388" class="btn telegram"><i class="fab fa-telegram"></i> Telegram</a>
-                <a href="viber://chat?number=+959964563388" class="btn viber"><i class="fab fa-viber"></i> Viber</a>
-                <a href="tel:09964563388" class="btn phone"><i class="fas fa-phone"></i> 09964563388</a>
-            </div>
-        </section>
-    </div>
+<footer>&copy; 2026 Min Copy & Print | 09964563388</footer>
 
-    <footer>
-        <p>&copy; 2026 Min Copy & Print. Designed for Mobile.</p>
-    </footer>
+<script>
+    // Order Number အလိုအလျောက် ထုတ်ပေးခြင်း (ဥပမာ- MIN-1234)
+    const orderNo = "MIN-" + Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('orderNo').value = orderNo;
 
-    <script>
-        const productSelect = document.getElementById('product-select');
-        const quantityInput = document.getElementById('quantity');
-        const totalPriceDisplay = document.getElementById('total-price');
+    document.getElementById('orderForm').onsubmit = function(e) {
+        e.preventDefault();
+        
+        const type = document.getElementById('itemType').value;
+        const qty = document.getElementById('qty').value;
+        const note = document.getElementById('note').value;
+        const no = document.getElementById('orderNo').value;
 
-        function updatePrice() {
-            const price = parseInt(productSelect.options[productSelect.selectedIndex].getAttribute('data-price'));
-            const qty = parseInt(quantityInput.value) || 0;
-            totalPriceDisplay.textContent = (price * qty).toLocaleString() + ' ကျပ်';
-        }
+        // Message တည်ဆောက်ခြင်း
+        const message = `Order No: ${no}%0Aအမျိုးအမည်: ${type}%0Aအရေအတွက်: ${qty}%0Aအသေးစိတ်: ${note}`;
+        
+        // Telegram သို့ ပို့ရန် (သင့်ဖုန်းနံပါတ်သို့ တိုက်ရိုက်)
+        const telegramUrl = `https://t.me/+959964563388?text=${message}`;
+        
+        window.open(telegramUrl, '_blank');
+    };
+</script>
 
-        productSelect.addEventListener('change', updatePrice);
-        quantityInput.addEventListener('input', updatePrice);
-    </script>
 </body>
 </html>
-    
